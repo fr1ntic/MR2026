@@ -1,16 +1,17 @@
 CC = gcc
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g -Werror=attributes
 
-SRCS = $(wildcard *.c)
-OBJS = $(SRCS:.c=.o)
+SRCS := $(shell find . -name '*.c')
+OBJS := $(patsubst ./%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
 NAME = Simulator
 
 program: $(OBJS)
 	$(CC) $(OBJS) -o $(NAME)
 
-%.o: %.c
+$(BUILD_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f *.o $(NAME)
+	rm -rf $(BUILD_DIR) $(NAME)

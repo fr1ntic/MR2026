@@ -42,3 +42,16 @@ void delete_list(Node* list) {
         nextnode = curnode->next;
     }
 }
+
+int len(Node* list) {
+    int lenght = 0;
+    Node* curnode = list;
+    while (curnode->data != nullptr) {
+        lenght += 1;
+        if (curnode->next == nullptr) {
+            break;
+        }
+        curnode = curnode->next;
+    }
+    return lenght;
+}

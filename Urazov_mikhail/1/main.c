@@ -3,7 +3,12 @@
 #include <time.h>
 #include <string.h>
 
+#define DEBUG
+
+#include "events/__event.h"
 #include "types.h"
+#include "signal.h"
+#include "linked_list.h"
 
 #define print_spacer printf("\n\n===================================================\n\n")
 
@@ -11,8 +16,10 @@
 #include <windows.h>
 #endif
 
-Person* person = NULL;
-World* world = NULL;
+Person* person = nullptr;
+World* world = nullptr;
+
+Node* event_list = nullptr;
 
 Luck dice() {
     return (Luck) rand() % 5;
@@ -150,7 +157,31 @@ void setup_world() {
     get_world_status_description(world->status), get_economy_status_description(world->economy));
 }
 
+void declare_events() {
+    event_list = create_list();
+    call_signals(event_list);
+}
+
+#ifdef DEBUG
+void test_event_checks() {
+    int ln = len(event_list);
+    for (int i = 0; i < ln; i++) {
+        Event* e = get(event_list, i);
+        e->check();
+    }
+}
+
+void test_event_results() {
+    int ln = len(event_list);
+    for (int i = 0; i < ln; i++) {
+        Event* e = get(event_list, i);
+        e->result();
+    }
+}
+#endif
+
 int main() {
+    declare_events();
     srand(time(NULL));
     world = malloc(sizeof(World));
     person = malloc(sizeof(Person));
@@ -158,6 +189,11 @@ int main() {
     #ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
+    #endif
+
+    #ifdef DEBUG
+    test_event_checks();
+    test_event_results();
     #endif
 
     print_spacer;

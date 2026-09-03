@@ -1,3 +1,6 @@
+#ifndef TYPES
+#define TYPES
+
 typedef enum Luck {
     LUCK_CRITICAL,
     LUCK_BAD,
@@ -46,3 +49,5 @@ typedef struct Person {
     int health;
     MoodType mood;
 } Person;
+
+#endif
