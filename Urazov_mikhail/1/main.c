@@ -19,8 +19,6 @@
 Person* person = nullptr;
 World* world = nullptr;
 
-Node* event_list = nullptr;
-
 Luck dice() {
     return (Luck) rand() % 5;
 }
@@ -153,35 +151,16 @@ void setup_world() {
     get_world_status_description(world->status), get_economy_status_description(world->economy));
 }
 
-void declare_events() {
-    event_list = create_list();
+void declare_events(Node* event_list) {
     call_signals(event_list);
 }
-
-#ifdef DEBUG
-void test_event_checks() {
-    int ln = len(event_list);
-    for (int i = 0; i < ln; i++) {
-        Event* e = get(event_list, i);
-        e->check();
-    }
-}
-
-void test_event_results() {
-    int ln = len(event_list);
-    for (int i = 0; i < ln; i++) {
-        Event* e = get(event_list, i);
-        e->result();
-    }
-}
-#endif
 
 Event** sorted_events = nullptr; // array
 int teenage_offset, youth_offset, middleage_offset, old_offset;
 int teenage_amount, youth_amount, middleage_amount, old_amount;
 int event_amount;
 
-void sort_events_by_stage() {
+void sort_events_by_stage(Node* event_list) {
     event_amount = len(event_list);
 
     sorted_events = malloc(sizeof(Event)*event_amount);
@@ -216,7 +195,6 @@ void sort_events_by_stage() {
                 break;
         }
     }
-    delete_list(event_list);
 }
 
 EventStage get_stage_by_age(int age) {
@@ -277,24 +255,22 @@ void simulate() {
 }
 
 int main() {
-    declare_events();
+    #ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+    #endif
 
     srand(time(NULL));
 
     world = malloc(sizeof(World));
     person = malloc(sizeof(Person));
 
-    #ifdef _WIN32
-    SetConsoleOutputCP(CP_UTF8);
-    SetConsoleCP(CP_UTF8);
-    #endif
+    Node* event_list = create_list();
 
-    #ifdef DEBUG
-    test_event_checks();
-    test_event_results();
-    #endif
+    declare_events(event_list);
 
-    sort_events_by_stage();
+    sort_events_by_stage(event_list);
+    delete_list(event_list);
 
     print_spacer;
     printf("\nДобро пожаловать в симулятор жизни! Для начала вам требуется настроить игровой мир...");
