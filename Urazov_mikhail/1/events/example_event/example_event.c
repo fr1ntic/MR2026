@@ -8,10 +8,12 @@
 
 EVENT_REGISTRATION(example, STAGE_YOUTH)
 
+// bool check(Person* p, World* w)
 EVENT_CHECK(example) {
-    printf("\nExample check!");
+    printf("\nyouth Example check!");
 }
 
+// void result(Person* p, World* w)
 EVENT_RESULT(example) {
-    printf("\nExample result!");
+    printf("\nyouth Example result!");
 }

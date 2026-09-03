@@ -1,7 +1,10 @@
 CC = gcc
 CFLAGS = -Wall -g -Werror=attributes
 
+EXCLUDED_FILE = ./events/example_event/example_event.c
+
 SRCS := $(shell find . -name '*.c')
+SRCS := $(filter-out $(EXCLUDED_FILE),$(SRCS))
 OBJS := $(patsubst ./%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
 NAME = Simulator

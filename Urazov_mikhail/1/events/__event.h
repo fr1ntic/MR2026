@@ -12,8 +12,8 @@ typedef enum EventStage {
 } EventStage;
 
 typedef void (*CB)(Node* l);
-typedef void (*Result)();
-typedef void (*Check)();
+typedef void (*Result)(Person* p, World* w);
+typedef bool (*Check)(Person* p, World* w);
 
 typedef struct Event {
     Result result;
@@ -21,8 +21,8 @@ typedef struct Event {
     EventStage stage;
 } Event;
 
-#define EVENT_RESULT(name)  void name##_result()
-#define EVENT_CHECK(name)   void name##_check() 
+#define EVENT_RESULT(name)  void name##_result(Person* p, World* w)
+#define EVENT_CHECK(name)   bool name##_check(Person* p, World* w) 
 
 #define EVENT_REGISTRATION(name, st) \
 EVENT_RESULT(name); \
